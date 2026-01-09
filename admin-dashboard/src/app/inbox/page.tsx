@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import SecureGuard from '@/components/SecureGuard';
 import { supabase } from '@/lib/supabase';
-import { MessageSquare, Instagram, MessageCircle, Search, Filter, CheckCircle2, Clock } from 'lucide-react';
+import { MessageSquare, Instagram, MessageCircle, Search, Filter, CheckCircle2, Clock, Sparkles } from 'lucide-react';
 import clsx from 'clsx';
 
 export default function InboxPage() {
@@ -24,7 +24,6 @@ export default function InboxPage() {
 
         fetchMessages();
 
-        // Subscribe to new messages
         const channel = supabase
             .channel('social_messages_realtime')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'social_messages' },
@@ -40,7 +39,7 @@ export default function InboxPage() {
 
     return (
         <SecureGuard>
-            <div className="flex h-[calc(100-64px)] overflow-hidden bg-charcoal text-offWhite">
+            <div className="flex h-[calc(100vh-64px)] overflow-hidden bg-charcoal text-offWhite">
                 {/* Sidebar - Message List */}
                 <div className="w-1/3 border-r border-offWhite/10 flex flex-col">
                     <div className="p-6 border-b border-offWhite/10">
@@ -119,15 +118,34 @@ export default function InboxPage() {
                                 {/* AI Insight Box */}
                                 <div className="p-6 bg-mutedGold/5 border border-mutedGold/20 rounded-sm">
                                     <h4 className="text-xs uppercase tracking-widest text-mutedGold font-bold mb-2 flex items-center gap-2">
-                                        <Sparkles size={14} /> AI Context Analysis
+                                        <Sparkles size={14} /> AI Suggested Response
                                     </h4>
-                                    <p className="text-sm text-coolGrey italic mb-4">
-                                        "The client seems interested in the 'Glass House' aesthetic. High purchase intent detected. Recommended action: Send residential portfolio PDF."
-                                    </p>
-                                    <div className="flex gap-2">
-                                        <button className="text-[10px] px-2 py-1 bg-mutedGold/20 rounded-full hover:bg-mutedGold/30 transition-colors">Generate Response</button>
-                                        <button className="text-[10px] px-2 py-1 bg-mutedGold/20 rounded-full hover:bg-mutedGold/30 transition-colors">Add to CRM</button>
-                                    </div>
+                                    {selectedMessage.ai_suggested_response ? (
+                                        <>
+                                            <p className="text-sm text-coolGrey italic mb-4 whitespace-pre-wrap">
+                                                "{selectedMessage.ai_suggested_response}"
+                                            </p>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => {
+                                                        const textarea = document.querySelector('textarea');
+                                                        if (textarea) textarea.value = selectedMessage.ai_suggested_response;
+                                                    }}
+                                                    className="text-[10px] px-3 py-1.5 bg-mutedGold/20 rounded-sm hover:bg-mutedGold/30 transition-colors uppercase tracking-widest font-bold"
+                                                >
+                                                    Apply Draft
+                                                </button>
+                                                <button className="text-[10px] px-3 py-1.5 border border-mutedGold/20 rounded-sm hover:bg-mutedGold/10 transition-colors uppercase tracking-widest">
+                                                    Regenerate
+                                                </button>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div className="flex items-center gap-2 text-coolGrey italic text-sm">
+                                            <Clock size={14} className="animate-pulse" />
+                                            AI Architect is analyzing this conversation...
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -160,5 +178,3 @@ export default function InboxPage() {
         </SecureGuard>
     );
 }
-
-import { Sparkles } from 'lucide-react';

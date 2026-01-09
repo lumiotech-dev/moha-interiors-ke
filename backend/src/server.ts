@@ -28,13 +28,19 @@ server.get('/', async (request, reply) => {
     return { status: 'ok', message: 'Moha Interiors API is running' };
 });
 
-import aiRoutes from './routes/ai/render';
+import aiRenderRoutes from './routes/ai/render';
+import aiConsultRoutes from './routes/ai/consult';
+import socialRoutes from './routes/social/messages';
+import leadRoutes from './routes/leads/score';
 
 const start = async () => {
     try {
         // Register routes
         await server.register(healthRoutes, { prefix: '/v1/health' });
-        await server.register(aiRoutes, { prefix: '/v1/ai' });
+        await server.register(aiRenderRoutes, { prefix: '/v1/ai/render-jobs' });
+        await server.register(aiConsultRoutes, { prefix: '/v1/ai' });
+        await server.register(socialRoutes, { prefix: '/v1/social' });
+        await server.register(leadRoutes, { prefix: '/v1/leads' });
 
         await server.listen({ port: parseInt(process.env.PORT || '3001'), host: '0.0.0.0' });
         const address = server.server.address();

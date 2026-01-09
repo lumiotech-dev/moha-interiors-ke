@@ -1,7 +1,8 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { createClient } from '@supabase/supabase-js';
+import { aiService } from '../../services/ai.service';
 
-export default async function aiRoutes(fastify: FastifyInstance, options: FastifyPluginOptions) {
+export default async function aiRenderRoutes(fastify: FastifyInstance, options: FastifyPluginOptions) {
 
     const supabase = createClient(
         process.env.SUPABASE_URL!,
@@ -12,46 +13,51 @@ export default async function aiRoutes(fastify: FastifyInstance, options: Fastif
         const { prompt, projectId, userId } = request.body as any;
 
         try {
-            // 1. Log the request to Supabase
+            // 1. Expand the prompt with AI
+            const expandedPrompt = await aiService.expandRenderPrompt(prompt);
+
+            // 2. Log the request to Supabase
             const { data: renderReq, error: insertError } = await supabase
                 .from('render_requests')
                 .insert([{
                     user_id: userId,
                     project_id: projectId,
-                    prompt,
+                    prompt: expandedPrompt, // Store the expanded version
                     status: 'processing',
-                    model: 'gemini-1.5-pro'
+                    model: 'gemini-1.5-pro + flux-pro' // Mocking model stack
                 }])
                 .select()
                 .single();
 
             if (insertError) throw insertError;
 
-            // 2. Mock AI Processing Logic (Integration with actual AI model happens here)
-            // In a real scenario, we'd send the prompt to Gemini or Claude
+            // 3. Simulated Async Processing
+            // In production, this would call a service like FAL.AI or STABILITY.AI
             setTimeout(async () => {
                 const mockResultUrl = `https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2070&auto=format&fit=crop`; // Mock result
 
-                await supabase
+                const { error: resultError } = await supabase
                     .from('render_results')
                     .insert([{
                         request_id: renderReq.id,
                         output_file_path: mockResultUrl,
-                        model_used: 'gemini-1.5-pro',
-                        cost_tokens: 1500
+                        model_used: 'flux-pro-v1',
+                        cost_tokens: 2500
                     }]);
 
-                await supabase
-                    .from('render_requests')
-                    .update({ status: 'completed', completed_at: new Date().toISOString() })
-                    .eq('id', renderReq.id);
-
-            }, 5000); // Simulate 5s processing
+                if (!resultError) {
+                    await supabase
+                        .from('render_requests')
+                        .update({ status: 'completed', completed_at: new Date().toISOString() })
+                        .eq('id', renderReq.id);
+                }
+            }, 8000); // Simulate longer high-quality processing
 
             return {
                 success: true,
                 requestId: renderReq.id,
-                message: 'Rendering job started in the background.'
+                expandedPrompt,
+                message: 'High-fidelity rendering job initiated.'
             };
 
         } catch (error: any) {
