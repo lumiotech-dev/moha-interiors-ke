@@ -1,25 +1,45 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/* Brand Kit Color Variables */
 :root {
-  --background: #F9F7F7;
-  --foreground: #222831;
+  --color-charcoal: #222831;
+  --color-charcoal-light: #3A4750;
+  --color-charcoal-dark: #1a1f26;
+  --color-off-white: #F9F7F7;
+  --color-muted-gold: #C0A06F;
+  --color-cool-grey: #DBE2EF;
+  --color-warm-grey: #3F72AF;
+  --color-success: #28a745;
+  --color-warning: #ffc107;
+  --color-error: #dc3545;
+  
+  --background: var(--color-off-white);
+  --foreground: var(--color-charcoal);
 }
 
 /* Luxury Dark Mode by Default */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #222831;
-    --foreground: #F9F7F7;
+    --background: var(--color-charcoal);
+    --foreground: var(--color-off-white);
   }
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-inter), sans-serif;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Luxury Typography */
@@ -27,6 +47,202 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-playfair), serif;
   font-weight: 700;
   letter-spacing: -0.02em;
+}
+
+/* Brand Kit Utility Classes */
+.bg-charcoal { background-color: var(--color-charcoal) !important; }
+.bg-charcoal-light { background-color: var(--color-charcoal-light) !important; }
+.bg-charcoal-dark { background-color: var(--color-charcoal-dark) !important; }
+.bg-offWhite { background-color: var(--color-off-white) !important; }
+.bg-mutedGold { background-color: var(--color-muted-gold) !important; }
+.bg-coolGrey { background-color: var(--color-cool-grey) !important; }
+.bg-warmGrey { background-color: var(--color-warm-grey) !important; }
+
+.text-charcoal { color: var(--color-charcoal) !important; }
+.text-charcoal-light { color: var(--color-charcoal-light) !important; }
+.text-charcoal-dark { color: var(--color-charcoal-dark) !important; }
+.text-offWhite { color: var(--color-off-white) !important; }
+.text-mutedGold { color: var(--color-muted-gold) !important; }
+.text-coolGrey { color: var(--color-cool-grey) !important; }
+.text-warmGrey { color: var(--color-warm-grey) !important; }
+
+.border-charcoal { border-color: var(--color-charcoal) !important; }
+.border-offWhite { border-color: var(--color-off-white) !important; }
+.border-mutedGold { border-color: var(--color-muted-gold) !important; }
+.border-coolGrey { border-color: var(--color-cool-grey) !important; }
+
+.font-playfair { font-family: var(--font-playfair), serif !important; }
+.font-inter { font-family: var(--font-inter), sans-serif !important; }
+
+/* LUXURY UTILITIES - Premium Design System */
+
+/* Glassmorphism Effect */
+.glass {
+  background: rgba(34, 40, 49, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(192, 160, 111, 0.1);
+}
+
+.glass-light {
+  background: rgba(249, 247, 247, 0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(34, 40, 49, 0.1);
+}
+
+/* Premium Shadows */
+.shadow-luxury {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(192, 160, 111, 0.1);
+}
+
+.shadow-luxury-gold {
+  box-shadow: 0 20px 60px rgba(192, 160, 111, 0.2), 0 0 40px rgba(192, 160, 111, 0.1);
+}
+
+.shadow-luxury-soft {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 0 20px rgba(192, 160, 111, 0.05);
+}
+
+/* Luxury Gradients */
+.gradient-luxury {
+  background: linear-gradient(135deg, var(--color-charcoal) 0%, var(--color-charcoal-dark) 100%);
+}
+
+.gradient-gold {
+  background: linear-gradient(135deg, var(--color-muted-gold) 0%, #d4b887 100%);
+}
+
+.gradient-overlay {
+  background: linear-gradient(180deg, rgba(34, 40, 49, 0) 0%, rgba(34, 40, 49, 0.8) 100%);
+}
+
+.gradient-overlay-light {
+  background: linear-gradient(180deg, rgba(249, 247, 247, 0) 0%, rgba(249, 247, 247, 0.95) 100%);
+}
+
+/* Premium Text Effects */
+.text-gradient-gold {
+  background: linear-gradient(135deg, var(--color-muted-gold) 0%, #d4b887 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-shadow-luxury {
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Luxury Button Styles */
+.btn-luxury {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.btn-luxury::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-luxury:hover::before {
+  left: 100%;
+}
+
+/* 3D Card Effect */
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-3d:hover {
+  transform: translateY(-10px) rotateX(2deg);
+}
+
+/* Luxury Image Overlay */
+.image-overlay-luxury {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-overlay-luxury::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(34, 40, 49, 0.7) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.image-overlay-luxury:hover::after {
+  opacity: 1;
+}
+
+/* Animated Border */
+.border-animated {
+  position: relative;
+  overflow: hidden;
+}
+
+.border-animated::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--color-muted-gold);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.border-animated:hover::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(192, 160, 111, 0.3), transparent);
+  background-size: 1000px 100%;
+  animation: shimmer 3s infinite;
+}
+
+/* Luxury Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-charcoal);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-muted-gold);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d4b887;
 }
 
 /* Lenis Scroll Smoothness */
